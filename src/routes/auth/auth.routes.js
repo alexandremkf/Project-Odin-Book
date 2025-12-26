@@ -7,26 +7,34 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 // Register
-router.post("/register", async (req, res) => {
-  const { username, email, password } = req.body;
+router.post("/register", async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
 
-  const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
-  await prisma.user.create({
-    data: {
-      username,
-      email,
-      passwordHash,
-      profile: {
-        create: {},
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        passwordHash,
+        profile: {
+          create: {},
+        },
       },
-    },
-  });
+    });
 
-  res.status(201).json({
-    message: "Usuário criado com sucesso",
-    userId: user.id,
-  });
+    res.status(201).json({
+      message: "Usuário criado com sucesso",
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Login

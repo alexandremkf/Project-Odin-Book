@@ -15,6 +15,7 @@ model User {
   createdAt    DateTime  @default(now())
 
   profile      Profile?
+  posts        Post[]
 }
 
 model Profile {
@@ -23,4 +24,13 @@ model Profile {
   profileImageUrl String?
   userId          Int      @unique
   user            User     @relation(fields: [userId], references: [id])
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
 }
