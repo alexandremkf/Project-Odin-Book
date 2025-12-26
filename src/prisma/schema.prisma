@@ -8,9 +8,19 @@ generator client {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  username     String   @unique
-  email        String   @unique
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  email        String    @unique
   passwordHash String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+
+  profile      Profile?
+}
+
+model Profile {
+  id              Int      @id @default(autoincrement())
+  bio             String?
+  profileImageUrl String?
+  userId          Int      @unique
+  user            User     @relation(fields: [userId], references: [id])
 }

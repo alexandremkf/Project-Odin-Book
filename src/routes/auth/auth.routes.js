@@ -17,10 +17,16 @@ router.post("/register", async (req, res) => {
       username,
       email,
       passwordHash,
+      profile: {
+        create: {},
+      },
     },
   });
 
-  res.status(201).json({ message: "Usuário criado com sucesso" });
+  res.status(201).json({
+    message: "Usuário criado com sucesso",
+    userId: user.id,
+  });
 });
 
 // Login
