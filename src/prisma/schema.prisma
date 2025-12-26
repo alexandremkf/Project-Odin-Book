@@ -16,6 +16,9 @@ model User {
 
   profile      Profile?
   posts        Post[]
+
+  followers    Follow[]  @relation("Follower")
+  following    Follow[]  @relation("Following")
 }
 
 model Profile {
@@ -33,4 +36,27 @@ model Post {
 
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Follow {
+  id           Int      @id @default(autoincrement())
+  followerId   Int
+  followingId  Int
+  status       FollowStatus @default(PENDING)
+  createdAt    DateTime @default(now())
+
+  follower     User @relation("Follower", fields: [followerId], references: [id])
+  following    User @relation("Following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
+enum FollowStatus {
+  PENDING
+  ACCEPTED
+}
+
+model Session {
+  @@map("session")
+  @@ignore
 }

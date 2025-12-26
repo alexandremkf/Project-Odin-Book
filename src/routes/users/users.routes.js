@@ -1,6 +1,8 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
+const requireAuth = require("../../middlewares/requireAuth");
+const { followUser, acceptFollow } = require("../../controllers/follow.controller");
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -30,5 +32,8 @@ router.put("/me/profile", isAuthenticated, async (req, res) => {
 
   res.json(profile);
 });
+
+router.post("/:id/follow", requireAuth, followUser);
+router.post("/:id/accept", requireAuth, acceptFollow);
 
 module.exports = router;
