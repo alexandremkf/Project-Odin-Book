@@ -9,6 +9,7 @@ const passport = require("./config/passport");
 const authRoutes = require("./routes/auth/auth.routes");
 const userRoutes = require("./routes/users/users.routes");
 const postRoutes = require("./routes/posts/posts.routes");
+const protectedRoutes = require("./routes/protected/protected.routes");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+app.use("/protected", protectedRoutes);
 
 // Health check route
 app.get("/", (req, res) => {
