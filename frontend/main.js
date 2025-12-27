@@ -2,7 +2,7 @@ const postsContainer = document.getElementById('posts-container');
 const createPostBtn = document.getElementById('create-post-btn');
 const textarea = document.querySelector('.post-create textarea');
 
-const API_URL = "http://localhost:3000"; // ou URL do seu deploy
+const API_URL = "https://project-odin-book-81vo.onrender.com/"; // ou URL do seu deploy
 
 // Função para buscar feed real do backend
 async function loadFeed() {
