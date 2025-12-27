@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odin-Book</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Odin-Book</div>
+    <input type="text" placeholder="Pesquisar..." class="search-bar">
+    <nav>
+      <a href="#">Início</a>
+      <a href="#">Perfil</a>
+      <a href="#">Sair</a>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <section class="feed">
+      <div class="post-create">
+        <textarea placeholder="No que você está pensando?"></textarea>
+        <button id="create-post-btn">Publicar</button>
+      </div>
+
+      <div id="posts-container">
+        <!-- Posts serão renderizados pelo JS -->
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <h3>Amigos</h3>
+      <ul id="friends-list">
+        <!-- Lista de amigos -->
+      </ul>
+    </aside>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
