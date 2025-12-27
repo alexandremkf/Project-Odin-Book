@@ -17,6 +17,9 @@ model User {
   profile      Profile?
   posts        Post[]
 
+  comments     Comment[] @relation("UserComments")
+  likes        Like[]    @relation("UserLikes")
+
   followers    Follow[]  @relation("Follower")
   following    Follow[]  @relation("Following")
 }
@@ -36,6 +39,9 @@ model Post {
 
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
+
+  comments  Comment[] @relation("PostComments")
+  likes     Like[]    @relation("PostLikes")
 }
 
 model Follow {
@@ -54,6 +60,29 @@ model Follow {
 enum FollowStatus {
   PENDING
   ACCEPTED
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  postId    Int
+  post      Post     @relation("PostComments", fields: [postId], references: [id])
+
+  authorId  Int
+  author    User     @relation("UserComments", fields: [authorId], references: [id])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  postId    Int
+  post      Post     @relation("PostLikes", fields: [postId], references: [id])
+
+  userId    Int
+  user      User     @relation("UserLikes", fields: [userId], references: [id])
 }
 
 model Session {

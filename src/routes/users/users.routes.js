@@ -22,9 +22,11 @@ router.get("/me", isAuthenticated, async (req, res) => {
 router.put("/me/profile", isAuthenticated, async (req, res) => {
   const { bio, profileImageUrl } = req.body;
 
-  const profile = await prisma.profile.update({
+  const profile = await prisma.profile.upsert({
     where: { userId: req.user.id },
-    data: {
+    update: { bio, profileImageUrl },
+    create: {
+      userId: req.user.id,
       bio,
       profileImageUrl,
     },
