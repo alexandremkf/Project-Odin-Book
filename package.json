@@ -6,9 +6,8 @@
     "dev": "node src/server.js",
     "start": "node ./src/server.js",
     "build": "npx prisma generate",
-    "postinstall": "npx prisma generate"
+    "postinstall": "npx prisma generate --schema ./src/prisma/schema.prisma"
   },
-  "postinstall": "npx prisma generate --schema ./src/prisma/schema.prisma",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexandremkf/Project-Odin-Book.git"
