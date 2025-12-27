@@ -26,7 +26,7 @@ const getFeed = async (req, res) => {
       },
       orderBy: { createdAt: "desc" },
       include: {
-        author: {
+        author: { 
           select: {
             id: true,
             username: true,
@@ -38,21 +38,13 @@ const getFeed = async (req, res) => {
           select: {
             id: true,
             content: true,
-            author: {
-              select: {
-                id: true,
-                username: true,
-              },
-            },
             createdAt: true,
+            author: { select: { id: true, username: true } },
           },
         },
         // Preparado para likes (ainda não existe model)
         likes: {
-          select: {
-            id: true,
-            userId: true,
-          },
+          select: { id: true, userId: true },
         },
       },
     });
@@ -64,4 +56,62 @@ const getFeed = async (req, res) => {
   }
 };
 
-module.exports = { getFeed };
+// Função para criar comentário
+const addComment = async (req, res) => {
+  const userId = req.user.id;
+  const postId = parseInt(req.params.id);
+  const { content } = req.body;
+
+  if (!content || content.trim() === "") {
+    return res.status(400).json({ message: "Comentário não pode ser vazio" });
+  }
+
+  try {
+    const comment = await prisma.comment.create({
+      data: {
+        content,
+        postId,
+        authorId: userId,
+      },
+      include: {
+        author: { select: { id: true, username: true } },
+      },
+    });
+
+    res.status(201).json(comment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao criar comentário" });
+  }
+};
+
+// Função para curtir post
+const addLike = async (req, res) => {
+  const userId = req.user.id;
+  const postId = parseInt(req.params.id);
+
+  try {
+    // Evita curtir duas vezes
+    const existingLike = await prisma.like.findUnique({
+      where: { postId_userId: { postId, userId } },
+    });
+
+    if (existingLike) {
+      return res.status(400).json({ message: "Você já curtiu este post" });
+    }
+
+    const like = await prisma.like.create({
+      data: {
+        postId,
+        userId,
+      },
+    });
+
+    res.status(201).json(like);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao curtir post" });
+  }
+};
+
+module.exports = { getFeed, addComment, addLike };

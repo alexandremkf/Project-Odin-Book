@@ -1,7 +1,7 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
-const { getFeed } = require("../../controllers/posts.controller");
+const { getFeed, addComment, addLike } = require("../../controllers/posts.controller");
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -24,8 +24,13 @@ router.post("/", isAuthenticated, async (req, res) => {
   res.status(201).json(post);
 });
 
-// Listar posts do usuário logado (feed inicial simples)
-// Feed personalizado (posts do próprio usuário + usuários seguidos)
+// Feed personalizado
 router.get("/", isAuthenticated, getFeed);
+
+// Comentário
+router.post("/:id/comment", isAuthenticated, addComment);
+
+// Curtir post
+router.post("/:id/like", isAuthenticated, addLike);
 
 module.exports = router;
